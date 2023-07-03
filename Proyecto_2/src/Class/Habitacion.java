@@ -25,7 +25,7 @@ public class Habitacion {
     }
     public void actualizarHistorial(Cliente huesped){
     hospedados++;
-        this.historial+=hospedados+". "+huesped.getName()+" "+huesped.getLastName()+" "+huesped.
+        this.historial+=hospedados+". "+huesped.getName()+" "+huesped.getLastName()+", llego el: "+huesped.getReservacion().getLlegada();
     }
     public int getNumero() {
         return numero;

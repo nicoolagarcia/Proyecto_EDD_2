@@ -32,7 +32,7 @@ public class HashTable<T> {
      * @return
      */
     public int getHash(String key) {
-        int hash = key.hashCode() % size;
+        int hash = key.toLowerCase().hashCode() % size;
         if (hash < 0) {
             hash = hash * -1;
         }
@@ -46,7 +46,7 @@ public class HashTable<T> {
      * @param data
      */
     public void insertar(String key, T data) {
-        int hash = getHash(key);
+        int hash = getHash(key.toLowerCase());
         if (table[hash] == null) {
             table[hash] = new Nodo(data);
         } else {
@@ -58,17 +58,18 @@ public class HashTable<T> {
         }
     }
 
-    /**
+    /**s
      * Retorna el indice del hash de la cadena tomada como llave
      * @param key
      * @return
      */
     public Nodo encontrar(String key) {
-        int hash = getHash(key);
+        int hash = getHash(key.toLowerCase());
         if (table[hash] == null) {
             return null;
         } else {
             return table[hash];
         }
     }
+    
 }

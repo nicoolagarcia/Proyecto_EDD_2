@@ -4,17 +4,38 @@
  */
 package IG;
 
+import Class.Cliente;
+import Class.Funciones;
+import Class.Habitacion;
+import Class.Reservacion;
+import EDD.Arbol;
+import EDD.Cola;
+import EDD.HashTable;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Nicola
  */
 public class Ventana_4 extends javax.swing.JFrame {
 
+    public static Ventana_1 v1;
+    public static Arbol<Cliente> reservaciones;
+    public static Cola[] tipos_hab;
+    public static HashTable<Cliente> huespedes;
+    Funciones f = new Funciones();
     /**
      * Creates new form Ventana_4
      */
-    public Ventana_4() {
+    public Ventana_4(Ventana_1 v1, Arbol reservaciones, HashTable huespedes, Cola[] tipos_hab) {
         initComponents();
+        this.v1 = v1;
+        v1.setVisible(false);
+        this.huespedes = huespedes;
+        this.tipos_hab = tipos_hab;
+        this.reservaciones = reservaciones;
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -44,7 +65,6 @@ public class Ventana_4 extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(650, 500));
         setMinimumSize(new java.awt.Dimension(650, 500));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -60,6 +80,7 @@ public class Ventana_4 extends javax.swing.JFrame {
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 290, -1, -1));
 
         input_in_id.setFont(new java.awt.Font("Century", 0, 18)); // NOI18N
+        input_in_id.setForeground(new java.awt.Color(0, 0, 0));
         input_in_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 input_in_idActionPerformed(evt);
@@ -86,7 +107,7 @@ public class Ventana_4 extends javax.swing.JFrame {
                 check_inActionPerformed(evt);
             }
         });
-        jPanel2.add(check_in, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 170, 100, 50));
+        jPanel2.add(check_in, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 170, 130, 50));
 
         jTabbedPane1.addTab("CHECK IN", jPanel2);
 
@@ -107,12 +128,24 @@ public class Ventana_4 extends javax.swing.JFrame {
                 check_outActionPerformed(evt);
             }
         });
-        jPanel1.add(check_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 170, 100, 50));
+        jPanel1.add(check_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 170, 130, 50));
 
         input_out_name.setFont(new java.awt.Font("Century", 0, 18)); // NOI18N
+        input_out_name.setForeground(new java.awt.Color(0, 0, 0));
+        input_out_name.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                input_out_nameActionPerformed(evt);
+            }
+        });
         jPanel1.add(input_out_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 190, 30));
 
         input_out_lastname.setFont(new java.awt.Font("Century", 0, 18)); // NOI18N
+        input_out_lastname.setForeground(new java.awt.Color(0, 0, 0));
+        input_out_lastname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                input_out_lastnameActionPerformed(evt);
+            }
+        });
         jPanel1.add(input_out_lastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 190, 30));
 
         jLabel8.setFont(new java.awt.Font("Century", 1, 18)); // NOI18N
@@ -133,6 +166,11 @@ public class Ventana_4 extends javax.swing.JFrame {
         atras.setFont(new java.awt.Font("Century", 1, 18)); // NOI18N
         atras.setForeground(new java.awt.Color(255, 204, 51));
         atras.setText("ATRÁS");
+        atras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atrasActionPerformed(evt);
+            }
+        });
         getContentPane().add(atras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 120, 60));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IG_imagenes/sala hotel .PNG"))); // NOI18N
@@ -142,16 +180,95 @@ public class Ventana_4 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void check_outActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_outActionPerformed
-        // TODO add your handling code here:
+        try{
+        Cliente cliente = f.EncontrarHuesped(huespedes,input_out_name.getText().toLowerCase(),input_out_lastname.getText().toLowerCase());
+        Habitacion hab = cliente.getHabitacion();
+        if ("simple".equals(hab.getTipo())) {
+                        tipos_hab[0].encolar(hab);
+                    } else if ("doble".equals(hab.getTipo())) {
+                        tipos_hab[1].encolar(hab);
+
+                    } else if ("triple".equals(hab.getTipo())) {
+                        tipos_hab[2].encolar(hab);
+                    } else {
+                        tipos_hab[3].encolar(hab);
+                    }
+        hab.actualizarHistorial(cliente);
+        cliente.setHabitacion(null);
+        f.EliminarHuesped(huespedes, input_out_name.getText().toLowerCase(),input_out_lastname.getText().toLowerCase());
+        JOptionPane.showMessageDialog(null, "El check out ha sido exitoso");
+        }catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Ha ocurrido un error, por favor vuelva a intentar");
+        }
     }//GEN-LAST:event_check_outActionPerformed
 
     private void check_inActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_inActionPerformed
-        // TODO add your handling code here:
+        try{
+        Cliente cliente = reservaciones.obtener(Integer.parseInt(input_in_id.getText()));
+        String tipo_hab = cliente.getReservacion().getTipo_hab();
+        if ("simple".equals(tipo_hab)) {
+            if (!tipos_hab[0].isEmpty()) {
+            cliente.setHabitacion((Habitacion)tipos_hab[0].getHead().getData());
+            tipos_hab[0].Desencolar();
+            reservaciones.eliminar(cliente.getId());
+            huespedes.insertar(cliente.getName().toLowerCase()+cliente.getLastName().toLowerCase(), cliente);
+            JOptionPane.showMessageDialog(null, "El check in ha sido exitoso");
+            }else{
+            JOptionPane.showMessageDialog(null, "NO hay habitaciones del tipo que desea en su reservacion disponibles");
+            }
+        } else if ("doble".equals(tipo_hab)) {
+            if (!tipos_hab[1].isEmpty()) {
+            cliente.setHabitacion((Habitacion)tipos_hab[1].getHead().getData());
+            tipos_hab[1].Desencolar();
+            reservaciones.eliminar(cliente.getId());
+            huespedes.insertar(cliente.getName().toLowerCase()+cliente.getLastName().toLowerCase(), cliente);
+            JOptionPane.showMessageDialog(null, "El check in ha sido exitoso");
+            }else{
+            JOptionPane.showMessageDialog(null, "NO hay habitaciones del tipo que desea en su reservacion disponibles");
+            }
+        } else if ("triple".equals(tipo_hab)) {
+           if (!tipos_hab[2].isEmpty()) {
+            cliente.setHabitacion((Habitacion)tipos_hab[2].getHead().getData());
+            tipos_hab[2].Desencolar();
+            reservaciones.eliminar(cliente.getId());
+            huespedes.insertar(cliente.getName().toLowerCase()+cliente.getLastName().toLowerCase(), cliente);
+            JOptionPane.showMessageDialog(null, "El check in ha sido exitoso");
+            }else{
+            JOptionPane.showMessageDialog(null, "NO hay habitaciones del tipo que desea en su reservacion disponibles");
+            }
+
+        } else if ("suite".equals(tipo_hab)) {
+if (!tipos_hab[3].isEmpty()) {
+            cliente.setHabitacion((Habitacion)tipos_hab[3].getHead().getData());
+            tipos_hab[3].Desencolar();
+            reservaciones.eliminar(cliente.getId());
+            huespedes.insertar(cliente.getName().toLowerCase()+cliente.getLastName().toLowerCase(), cliente);
+            JOptionPane.showMessageDialog(null, "El check in ha sido exitoso");
+            }else{
+            JOptionPane.showMessageDialog(null, "NO hay habitaciones del tipo que desea en su reservacion disponibles");
+            }
+        }
+        }catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Ha ocurrido un error, por favor vuelva a intentar");
+
+        }
     }//GEN-LAST:event_check_inActionPerformed
 
     private void input_in_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_in_idActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_input_in_idActionPerformed
+
+    private void atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasActionPerformed
+        this.setVisible(false);
+        v1.setVisible(true);    }//GEN-LAST:event_atrasActionPerformed
+
+    private void input_out_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_out_nameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_input_out_nameActionPerformed
+
+    private void input_out_lastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_out_lastnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_input_out_lastnameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,7 +300,7 @@ public class Ventana_4 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Ventana_4().setVisible(true);
+                new Ventana_4(v1, reservaciones, huespedes, tipos_hab).setVisible(true);
             }
         });
     }

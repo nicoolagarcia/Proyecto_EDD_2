@@ -13,6 +13,9 @@ public class Nodo <T> {
     private T data;
     private Nodo pNext;
 
+    public Nodo() {
+    }
+
     public Nodo(T data, Nodo pNext) {
         this.data = data;
         this.pNext = pNext;

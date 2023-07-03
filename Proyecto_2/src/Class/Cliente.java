@@ -9,16 +9,17 @@ package Class;
  * @author Nicola
  */
 public class Cliente {
+
     private String name;
     private String lastName;
     private int id;
     private String email;
     private String gender;
-    private int cel;
+    private String cel;
     private Habitacion habitacion;
     private Reservacion reservacion;
 
-    public Cliente(String name, String lastName, int id, String email, String gender, int cel) {
+    public Cliente(String name, String lastName, int id, String email, String gender, String cel) {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
@@ -27,20 +28,35 @@ public class Cliente {
         this.cel = cel;
     }
 
-    public Cliente(String name, String lastName, String email, String gender, int cel) {
+    public Cliente(String name, String lastName, int id, String email, String gender) {
+        this.name = name;
+        this.lastName = lastName;
+        this.id = id;
+        this.email = email;
+        this.gender = gender;
+    }
+
+    public Cliente(String name, String lastName, String email, String gender, String cel) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.gender = gender;
         this.cel = cel;
     }
-    public String mostrarhuesped(){
-        String cadena="La Persona: ";
-        cadena+=this.name+" "+this.lastName+"\nSe encuentra hospedado en la habitacion "+this.habitacion.getNumero()+" de tipo "+this.habitacion.getTipo()+" "+this.habitacion.getPiso();
-    return cadena;
-    
-    
+
+    public String mostrarhuesped() {
+        String cadena = "La Persona: ";
+        cadena += this.name + " " + this.lastName + "\nSe encuentra hospedado en la habitacion " + this.habitacion.getNumero() + " de tipo " + this.habitacion.getTipo() + " piso " + this.habitacion.getPiso();
+        return cadena;
+
     }
+
+    public String mostrarreservacion() {
+        String cadena = "La Persona: ";
+        cadena += this.name + " " + this.lastName + "\nReservo una habitacion de tipo " + this.reservacion.getTipo_hab() + "\nDesde: " + this.reservacion.getLlegada() + "\nHasta: " + this.reservacion.getSalida();
+        return cadena;
+    }
+
     public String getName() {
         return name;
     }
@@ -81,11 +97,11 @@ public class Cliente {
         this.gender = gender;
     }
 
-    public int getCel() {
+    public String getCel() {
         return cel;
     }
 
-    public void setCel(int cel) {
+    public void setCel(String cel) {
         this.cel = cel;
     }
 
@@ -105,5 +121,4 @@ public class Cliente {
         this.reservacion = reservacion;
     }
 
-    
 }
